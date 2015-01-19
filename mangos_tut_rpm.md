@@ -21,7 +21,7 @@ Because this is a Red Hat derivative firewalls are more prominently installed fr
 + 7878 SOAP - (OPTIONAL) Soap interface
 + 3443 Remote Access (OPTIONAL) - Remote Console Access (using PUTTY this needs a RAW connection)
 + 80 HTTP - (OPTIONAL) if you decide to use the GM Commands Script provided or if you have a web-page you want on your server
-
++ 3306 MySQL - (OPTIONAL) if you want to manage your MySQL or MariaSQL with a remote host
 
 Also for this tutorial i will be using the MASTER branch when i git clone if you would like to specifically choose the branch to clone i would suggest reading a bit of documentation about choosing branches on github before we get started.
 
@@ -32,8 +32,5 @@ Ace was not available in the core repositories during the creation of the tutori
 As of the time of this writing I had to run wget and grab the ACE release directly.
 
 ACE 6.3.1 is needed for MaNGOS builds (need information from Wiki)
-For X86
-http://download.opensuse.org/repositories/devel:/libraries:/ACE:/bugfixonly/RedHat_RHEL-6/i686/ace-6.3.1-16.el6.i686.rpm
-
-For X86_64
-http://download.opensuse.org/repositories/devel:/libraries:/ACE:/bugfixonly/RedHat_RHEL-6/x86_64/ace-6.3.1-16.el6.x86_64.rpm
+[For X86](http://download.opensuse.org/repositories/devel:/libraries:/ACE:/bugfixonly/RedHat_RHEL-6/i686/ace-6.3.1-16.el6.i686.rpm)
+[For X86_64](http://download.opensuse.org/repositories/devel:/libraries:/ACE:/bugfixonly/RedHat_RHEL-6/x86_64/ace-6.3.1-16.el6.x86_64.rpm)
