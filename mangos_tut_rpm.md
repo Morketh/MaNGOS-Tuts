@@ -83,7 +83,7 @@ yum localinstall ace-6.3.1-16.el6.i686.rpm
 yum localinstall ace-6.3.1-16.el6.x86_64.rpm
 ```
 at this point you should have a clean working environment ready to go. and now we can start pull down the MaNGOS sources and set up our build environment.
-###Build Environment
+###BUILDING MANGOS
  At this time lets create our base directory tree from my home directory I'm going to create a SOURCES directory in which i will run all my git clones it is in this base directory where i keep all of my code.
  I'm going to create all of these directories in order to keep all of my repositories organized in a somewhat orderly fashion.
  ```bash
@@ -97,5 +97,11 @@ at this point you should have a clean working environment ready to go. and now w
 git clone https://github.com/mangosthree/scripts.git server/src/bindings/scripts
 ```
 now you will note i am placing the scripts into the `server/src/bindings/scripts` directory this is rather important as we will be setting this as on of our compile options later on. Its important to note here that this is a step that can be hard to understand for a first timer but we wont get into depth in this tutorial about it.
-
- 
+once all of our downloads are done we can create a few more directories and kick off the compile.
+```bash
+mkdir _build && cd _build
+```
+and now for the huge command of the day.
+```bash
+cmake .. -DTBB_USE_EXTERNAL=1 -DCMAKE_BUILD_TYPE=release -DACE_USE_EXTERNAL=1 -DCMAKE_INSTALL_PREFIX=/opt/mangos -DINCLUDE_BINDINGS_DIR=scripts -DPCH=0 -DCMAKE_CXX_FLAGS="-O3 -march=native" -DCMAKE_C_FLAGS="-O3 -march=native"
+```
