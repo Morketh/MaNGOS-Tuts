@@ -1,6 +1,6 @@
 #Compiling and Installing on Red Hat Based Distros
 
-First off I made a Tutorial for Debian based distros Specifically Ubuntu Located ["http://ubuntuforums.org/showthread.php?t=1964479"](HERE). This guide is actually pretty old and with the new updates to the servers I thought it was time to re build my Tutorial. Now i can hear you saying "But the thread title says Red Hat", and indeed you would be correct. For this particular guide i will be using a Red Hat Variation namely CentOS. Before we get started lets run through the basics:
+First off I made a Tutorial for Debian based distros Specifically Ubuntu Located [HERE](http://ubuntuforums.org/showthread.php?t=1964479). This guide is actually pretty old and with the new updates to the servers I thought it was time to re build my Tutorial. Now i can hear you saying "But the thread title says Red Hat", and indeed you would be correct. For this particular guide i will be using a Red Hat Variation namely CentOS. Before we get started lets run through the basics:
 
 This guide I will be assuming you have the OS pre-installed and ready for the picking.
 For this tutorial i will be using 2 Virtual Machines (one for Mangosd the other for RealmD) during the course of this tutorial i will mark which steps for which machines (in the case you want to install on the SAME machine you may do so I am writing the guide in this fashion to show the separation of services)
