@@ -130,4 +130,14 @@ make -j`getconf _NPROCESSORS_ONLN` && make install
 ```
 The option `getconf _NPROCESSORS_ONLN` instructs the server to get the number of online CPUs and returns that value to the compiler (make). Some system comparisons:
 + Dell Poweredge R900 4 quad-cores (total of 16 cores at 1.6GHz) and the server compiled in just about 2 minutes. 
-+ Dell Poweredge 2850 2 dual cores (total of 4 cores at 2.8GHz) compiled in roughly 12:24 - 
++ Dell Poweredge 2850 2 dual cores (total of 4 cores at 2.8GHz) compiled in roughly 30 minutes.
+so depending on your system speed (and number of cores) this step could very well take a while to complete. Once the compile is done and you dont have any errors you can proceed to install it with
+```bash
+make install
+```
+This will install your server software in the `-DCMAKE_INSTALL_PREFIX` location that we specified during the cmake configuration step. Before we go on lets look at the directory structure
++ /opt/mangos - this is our root directory (if yours is different you can substitute this value for your location)
++ /opt/mangos/etc - will be all our configuration files
++ /opt/mangos/bin - binary directory containing the realmd and the mangosd programs
++ /opt/mangos/logs - we will create this directory for our log files
++ /opt/mangos/data - we will create this directory for our data files
