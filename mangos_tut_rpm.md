@@ -48,10 +48,24 @@ baseurl = http://yum.mariadb.org/10.0/centos7-amd64
 gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
 gpgcheck=1
 ```
-After the file is in place, install MariaDB with:
+once we add the MariaDB repo lets also add the Repository for the ACE installs
+```bash
+nano /etc/yum.repos.d/ace_micro.repo
+```
+and in this file we will add the following:
+```bash
+[devel_libraries_ACE_micro]
+name=Latest ACE micro release (CentOS_7)
+type=rpm-md
+baseurl=http://download.opensuse.org/repositories/devel:/libraries:/ACE:/micro/CentOS_7/
+gpgcheck=1
+gpgkey=http://download.opensuse.org/repositories/devel:/libraries:/ACE:/micro/CentOS_7/repodata/repomd.xml.key
+enabled=1
+```
+After the file is in place, install MariaDB and ACE with:
 ```bash
 # sudo if not root
-yum install MariaDB-server MariaDB-client
+yum install MariaDB-server MariaDB-client ace-6.3.1
 ```
 Depending on your internet speed this might be a good time to get a cup of coffee during the creation of this tutorial I had about 7 hundred packages to install as well as updates.
 you will be prompted to accept the GPG key after the packages have been downloaded. Once all of that is installed we can move on to the rest of the development tools and libraries with the command:
@@ -60,39 +74,17 @@ you will be prompted to accept the GPG key after the packages have been download
 yum groupinstall "Development Tools" "Additional Development"
 ```
 The above group installs might be a bit overkill for installing libraries and dependencies how ever it ensures all necessary libraries are installed with the exception of ACE.
-Ace was not available in the core repositories during the creation of this tutorial and should be downloaded and installed manually (in the event that some one finds a repository that includes ACE I will update this guide with the new information) I will explain how in a minute.
-As of the time of this writing I had to run wget and grab the ACE release directly.
-
-ACE 6.3.1 is needed for newer MaNGOS builds
-```bash
-## X86
-wget http://download.opensuse.org/repositories/devel:/libraries:/ACE:/bugfixonly/RedHat_RHEL-6/i686/ace-6.3.1-16.el6.i686.rpm
-#
-## OR
-## X64
-wget http://download.opensuse.org/repositories/devel:/libraries:/ACE:/bugfixonly/RedHat_RHEL-6/x86_64/ace-6.3.1-16.el6.x86_64.rpm
-```
-once your ACE package is done downloading you may proceed to install it with:
-```bash
-# sudo if not root
-## X86
-yum localinstall ace-6.3.1-16.el6.i686.rpm
-#
-## OR
-# X64
-yum localinstall ace-6.3.1-16.el6.x86_64.rpm
-```
-at this point you should have a clean working environment ready to go. and now we can start pull down the MaNGOS sources and set up our build environment.
+at this point you should have a clean working environment ready to go. and now we can start to pull down the MaNGOS sources and set up our build environment.
 ###BUILDING MANGOS
- At this time lets create our base directory tree from my home directory I'm going to create a SOURCES directory in which i will run all my git clones it is in this base directory where i keep all of my code.
- I'm going to create all of these directories in order to keep all of my repositories organized in a somewhat orderly fashion.
- ```bash
- mkdir SOURCES
- cd SOURCES
- git clone https://github.com/mangosthree/server.git
- git clone https://github.com/mangosthree/database.git
- ```
- Now you should have bolth the database and the server code ready to go however we need to add the scripts library in order to have that compile with our our core
+At this time lets create our base directory tree from my home directory I'm going to create a SOURCES directory in which i will run all my git clones it is in this base directory where i keep all of my code.
+I'm going to create all of these directories in order to keep all of my repositories organized in a somewhat orderly fashion.
+```bash
+mkdir SOURCES
+cd SOURCES
+git clone https://github.com/mangosthree/server.git
+git clone https://github.com/mangosthree/database.git
+```
+Now you should have both the database and the server code ready to go however we need to add the scripts library in order to have that compile with our our core
 ```bash
 git clone https://github.com/mangosthree/scripts.git server/src/bindings/scripts
 ```
@@ -103,24 +95,39 @@ mkdir _build && cd _build
 ```
 and now for the huge command of the day.
 ```bash
-cmake .. -DTBB_USE_EXTERNAL=1 -DCMAKE_BUILD_TYPE=release -DACE_USE_EXTERNAL=1 -DCMAKE_INSTALL_PREFIX=/opt/mangos -DINCLUDE_BINDINGS_DIR=scripts -DPCH=0 -DCMAKE_CXX_FLAGS="-O3 -march=native" -DCMAKE_C_FLAGS="-O3 -march=native"
+cmake .. -DTBB_USE_EXTERNAL=1 -DCMAKE_BUILD_TYPE=release -DACE_USE_EXTERNAL=0 -DCMAKE_INSTALL_PREFIX=/opt/mangos -DINCLUDE_BINDINGS_DIR=scripts -DPCH=0 -DCMAKE_CXX_FLAGS="-O3 -march=native" -DCMAKE_C_FLAGS="-O3 -march=native"
 ```
-at this point if you get something like this:
-```bash
-CMake Error at CMakeLists.txt:137 (message):
-  This project requires ACE installed when ACE_USE_EXTERNAL is set.  Please
-  download the ACE Micro Release Kit from http://download.dre.vanderbilt.edu/
-  and install it.  If this script didn't find ACE and it was correctly
-  installed please set ACE_ROOT to the correct path.
-```
-then ACE hasnt been correctly installed If you ran the above install (yum localinstall ace) you need to ALSO set the ACE_ROOT so that cmake can acuratly determine where in your path its located
-now at first this one line looks pretty scary, but lets take a closer look and break it down to understand what were doing here
-+ -DTBB_USE_EXTERNAL=1 this will instruct the compiler to locate and use the External TBB installation (should have been installed with the "Additional Development" group)
+Now at first this one line looks pretty scary, but lets take a closer look and break it down to understand what were doing here
++ -DTBB_USE_EXTERNAL=1 this will instruct the compiler to locate and use the External TBB sources (should have been installed with the "Additional Development" group)
 + -DCMAKE_BUILD_TYPE=release for debugging purposes you may change this to debug
-+ -DACE_USE_EXTERNAL=1 remember that ACE package we downloaded earlier? Yes this is where the compiler is told to use that
++ -DACE_USE_EXTERNAL=0 remember that ACE package we installed earlier? Yes this is where the compiler is told to use that If we wanted to install MaNGOS with an EXTERNAL ace package we would need to download the source tar-ball and compile ACE along side of mangos
 + -DCMAKE_INSTALL_PREFIX=/opt/mangos this is our installation directory feel free to change this to any location you want however i prefer to have it here as this is the "optional software directory"
 + -DINCLUDE_BINDINGS_DIR=scripts this is the scripts directory that we cloned before you must have the cloned directory inside of the src/bindings directory
 + -DPCH=0 Pre-compiled headers option (tends to speed compile up however i dont think pre-compiled headers ship with mangos if any one would like to clarify on that id be happy to add the information)
 I found these next two off another wiki page for architecture optimization options essentially it stream-lines the code for your hardware
 + -DCMAKE_CXX_FLAGS="-O3 -march=native"
 + -DCMAKE_C_FLAGS="-O3 -march=native"
+now you should have a fully configured source directory and some output should appear on your terminal. as an example this is what mine looked like:
+```bash
+-- Detected 64-bit platform.
+-- Using mysql-config: /usr/bin/mysql_config
+-- Found MySQL library: /usr/lib64/libmysqlclient_r.so
+-- Found MySQL headers: /usr/include/mysql
+-- Found OpenSSL: /usr/lib64/libssl.so;/usr/lib64/libcrypto.so (found version "1.0.1e")
+-- Found ZLIB: /usr/lib64/libz.so (found version "1.2.7")
+-- MaNGOS-Core revision  : a681260670a3afee4f7e986a4de6dcbb7308ec81
+-- Install server to     : /opt/mangos
+-- Build script library  : Yes (using scripts)
+-- Use PCH               : No
+-- Using Linux port
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /root/SOURCES/server/_build
+```
+at this point we can safely run our make and then proceed to install our packages
+```bash
+make -j`getconf _NPROCESSORS_ONLN` && make install
+```
+The option `getconf _NPROCESSORS_ONLN` instructs the server to get the number of online CPUs and returns that value to the compiler (make). Some system comparisons:
++ Dell Poweredge R900 4 quad-cores (total of 16 cores at 1.6GHz) and the server compiled in just about 2 minutes. 
++ Dell Poweredge 2850 2 dual cores (total of 4 cores at 2.8GHz) compiled in roughly 12:24 - 
