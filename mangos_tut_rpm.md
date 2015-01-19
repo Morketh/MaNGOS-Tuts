@@ -104,10 +104,12 @@ Now at first this one line looks pretty scary, but lets take a closer look and b
 + -DCMAKE_INSTALL_PREFIX=/opt/mangos this is our installation directory feel free to change this to any location you want however i prefer to have it here as this is the "optional software directory"
 + -DINCLUDE_BINDINGS_DIR=scripts this is the scripts directory that we cloned before you must have the cloned directory inside of the src/bindings directory
 + -DPCH=0 Pre-compiled headers option (tends to speed compile up however i dont think pre-compiled headers ship with mangos if any one would like to clarify on that id be happy to add the information)
+
 I found these next two off another wiki page for architecture optimization options essentially it stream-lines the code for your hardware
 + -DCMAKE_CXX_FLAGS="-O3 -march=native"
 + -DCMAKE_C_FLAGS="-O3 -march=native"
-now you should have a fully configured source directory and some output should appear on your terminal. as an example this is what mine looked like:
+
+Now you should have a fully configured source directory and some output should appear on your terminal. as an example this is what mine looked like:
 ```bash
 -- Detected 64-bit platform.
 -- Using mysql-config: /usr/bin/mysql_config
@@ -126,13 +128,14 @@ now you should have a fully configured source directory and some output should a
 ```
 at this point we can safely run our make and then proceed to install our packages
 ```bash
-make -j`getconf _NPROCESSORS_ONLN` && make install
+make -j`getconf _NPROCESSORS_ONLN`
 ```
 The option `getconf _NPROCESSORS_ONLN` instructs the server to get the number of online CPUs and returns that value to the compiler (make). Some system comparisons:
 + Dell Poweredge R900 4 quad-cores (total of 16 cores at 1.6GHz) and the server compiled in just about 2 minutes. 
 + Dell Poweredge 2850 2 dual cores (total of 4 cores at 2.8GHz) compiled in roughly 30 minutes.
 so depending on your system speed (and number of cores) this step could very well take a while to complete. Once the compile is done and you dont have any errors you can proceed to install it with
 ```bash
+# sudo if not root
 make install
 ```
 This will install your server software in the `-DCMAKE_INSTALL_PREFIX` location that we specified during the cmake configuration step. Before we go on lets look at the directory structure
