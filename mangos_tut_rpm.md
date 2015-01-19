@@ -8,20 +8,20 @@ For this tutorial i will be using 2 Virtual Machines (one for Mangosd the other 
 
 ###PREREQUISITES
 As a prerequisite you should understand the following:
-+Knowledge of BASH a Plus however not required
-+Users should also be fairly familiar with the Yellowdog Updater, Modified (yum package manager)
-+Since some of the repositories in ClearOS are disabled or are specifically for ClearOS users should also be familiar with wget for other required packages
-+Users should be knowledgeable with git and BASIC functionality we will need this for cloning repos
-+usage of Putty and WinSCP is a bonus however if your doing this on the box its self you may not need these tools i will be using them for the tutorial since my Poweredge has no monitor :cool:
++ Knowledge of BASH a Plus however not required
++ Users should also be fairly familiar with the Yellowdog Updater, Modified (yum package manager)
++ Since some of the repositories in ClearOS are disabled or are specifically for ClearOS users should also be familiar with wget for other required packages
++ Users should be knowledgeable with git and BASIC functionality we will need this for cloning repos
++ usage of Putty and WinSCP is a bonus however if your doing this on the box its self you may not need these tools i will be using them for the tutorial since my Poweredge has no monitor :cool:
 
 ###PORTS
 Because this is a Red Hat derivative firewalls are more prominently installed from the get-go i will give a list of ports that you will need in order to use the system as this is an EAQ (Excessively Asked Question)
-+22 SSH - Remote Shell (Operating System not Mangos Console)
-+8085 mangos - client to world connection
-+3724 realmd - client to Authentication Server
-+7878 SOAP - (OPTIONAL) Soap interface
-+3443 Remote Access (OPTIONAL) - Remote Console Access (using PUTTY this needs a RAW connection)
-+80 HTTP - (OPTIONAL) if you decide to use the GM Commands Script provided or if you have a web-page you want on your server
++ 22 SSH - Remote Shell (Operating System not Mangos Console)
++ 8085 mangos - client to world connection
++ 3724 realmd - client to Authentication Server
++ 7878 SOAP - (OPTIONAL) Soap interface
++ 3443 Remote Access (OPTIONAL) - Remote Console Access (using PUTTY this needs a RAW connection)
++ 80 HTTP - (OPTIONAL) if you decide to use the GM Commands Script provided or if you have a web-page you want on your server
 
 
 Also for this tutorial i will be using the MASTER branch when i git clone if you would like to specifically choose the branch to clone i would suggest reading a bit of documentation about choosing branches on github before we get started.
