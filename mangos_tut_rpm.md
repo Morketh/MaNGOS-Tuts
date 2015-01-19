@@ -53,7 +53,7 @@ After the file is in place, install MariaDB with:
 # sudo if not root
 yum install MariaDB-server MariaDB-client
 ```
-Depending on your internet speed this might be a good tI'me to get a cup of coffee during the creation of this tutorial I had about 7 hundred packages to install as well as updates.
+Depending on your internet speed this might be a good time to get a cup of coffee during the creation of this tutorial I had about 7 hundred packages to install as well as updates.
 you will be prompted to accept the GPG key after the packages have been downloaded. Once all of that is installed we can move on to the rest of the development tools and libraries with the command:
 ```bash
 # sudo if not root
@@ -84,7 +84,7 @@ yum localinstall ace-6.3.1-16.el6.x86_64.rpm
 ```
 at this point you should have a clean working environment ready to go. and now we can start pull down the MaNGOS sources and set up our build environment.
 ###Build Environment
- At this tI'me lets create our base directory tree from my home directory I'm going to create a SOURCES directory in which i will run all my git clones it is in this base directory where i keep all of my code.
+ At this time lets create our base directory tree from my home directory I'm going to create a SOURCES directory in which i will run all my git clones it is in this base directory where i keep all of my code.
  I'm going to create all of these directories in order to keep all of my repositories organized in a somewhat orderly fashion.
  ```bash
  mkdir SOURCES
@@ -96,4 +96,6 @@ at this point you should have a clean working environment ready to go. and now w
 ```bash
 git clone https://github.com/mangosthree/scripts.git server/src/bindings/scripts
 ```
+now you will note i am placing the scripts into the `server/src/bindings/scripts` directory this is rather important as we will be setting this as on of our compile options later on. Its important to note here that this is a step that can be hard to understand for a first timer but we wont get into depth in this tutorial about it.
+
  
