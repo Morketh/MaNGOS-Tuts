@@ -1,7 +1,6 @@
-
 #Compiling and Installing on Red Hat Based Distros
 
-First off I made a Tutorial for Debian based distros Specifically Ubuntu Located [URL="http://ubuntuforums.org/showthread.php?t=1964479"]HERE[/URL]. This guide is actually pretty old and with the new updates to the servers I thought it was time to re build my Tutorial. Now i can hear you saying "But the thread title says Red Hat", and indeed you would be correct. For this particular guide i will be using a Red Hat Variation namely CentOS. Before we get started lets run through the basics:
+First off I made a Tutorial for Debian based distros Specifically Ubuntu Located ["http://ubuntuforums.org/showthread.php?t=1964479"](HERE). This guide is actually pretty old and with the new updates to the servers I thought it was time to re build my Tutorial. Now i can hear you saying "But the thread title says Red Hat", and indeed you would be correct. For this particular guide i will be using a Red Hat Variation namely CentOS. Before we get started lets run through the basics:
 
 This guide I will be assuming you have the OS pre-installed and ready for the picking.
 For this tutorial i will be using 2 Virtual Machines (one for Mangosd the other for RealmD) during the course of this tutorial i will mark which steps for which machines (in the case you want to install on the SAME machine you may do so I am writing the guide in this fashion to show the separation of services)
@@ -12,7 +11,7 @@ As a prerequisite you should understand the following:
 + Users should also be fairly familiar with the Yellowdog Updater, Modified (yum package manager)
 + Since some of the repositories in ClearOS are disabled or are specifically for ClearOS users should also be familiar with wget for other required packages
 + Users should be knowledgeable with git and BASIC functionality we will need this for cloning repos
-+ usage of Putty and WinSCP is a bonus however if your doing this on the box its self you may not need these tools i will be using them for the tutorial since my Poweredge has no monitor :cool:
++ usage of Putty and WinSCP is a bonus however if your doing this on the box its self you may not need these tools
 
 ###PORTS
 Because this is a Red Hat derivative firewalls are more prominently installed from the get-go i will give a list of ports that you will need in order to use the system as this is an EAQ (Excessively Asked Question)
