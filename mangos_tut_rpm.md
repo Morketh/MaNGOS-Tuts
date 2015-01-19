@@ -133,6 +133,7 @@ make -j`getconf _NPROCESSORS_ONLN`
 The option `getconf _NPROCESSORS_ONLN` instructs the server to get the number of online CPUs and returns that value to the compiler (make). Some system comparisons:
 + Dell Poweredge R900 4 quad-cores (total of 16 cores at 1.6GHz) and the server compiled in just about 2 minutes. 
 + Dell Poweredge 2850 2 dual cores (total of 4 cores at 2.8GHz) compiled in roughly 30 minutes.
+
 so depending on your system speed (and number of cores) this step could very well take a while to complete. Once the compile is done and you dont have any errors you can proceed to install it with
 ```bash
 # sudo if not root
@@ -142,5 +143,71 @@ This will install your server software in the `-DCMAKE_INSTALL_PREFIX` location 
 + /opt/mangos - this is our root directory (if yours is different you can substitute this value for your location)
 + /opt/mangos/etc - will be all our configuration files
 + /opt/mangos/bin - binary directory containing the realmd and the mangosd programs
+
+
+#####NOTES
+just a few things id like to bring to your attention:
++ thus far we have compiled our mangos core and grabbed all of our libraries and dependencies and we have the software installed
++ if you are running a RealmD server separate from a MangosD server you should follow the above outlined steps on your secondary server as well.
++ the following steps will be labelled with Mangos Server and Realm Server were appropriate
+
+##DATABSE INSTALLATION
+Lets get back to our sources directory and start with adding in the required databases. Up until just recently adding all the databases and there patches was very difficult and i had created a few scripts to manage that task however i will not be using them as Factionwars, Nemok, BrainDedd and Antz have done a great job on a bash script that does most of the heavy lifting for you.
+We are going to run a few commands to perform the following tasks:
++ Set up root password (in the event it wasn't done during the yum install step)
++ import realmd.sql
++ import mangos.sql
++ import characters.sql
++ import scriptdev2 database (is this needed? Ive heard some things around the wiki about moving all that into the core when will that take effect?)
+
+now that we know what we are doing lets how we are doing it:
++ MySQL root password:
+```bash
+# In the even that you system didnt set a password at the time of install you will need to set the password here in order to use the installer provided as this script will defualt to "root" as the password
+mysql --user=root --password= --host=localhost
+# you should be looking at the MariaDB prompt 
+# MariaDB [(none)]>
+```
+now at this prompt we will issue a few commands in order to set our root password and secure the server.
+```bash
+UPDATE mysql.user SET Password = PASSWORD('new_password_here') WHERE User = 'root';
+FLUSH PRIVILEGES;
+exit;
+```
+This will set the password of 'new_password_here' to the user root, it will effect every instance of the user root so all passwords for root are now 'new_password_here'. The FLUSH statement causes the server to reread the grant tables. Without it, the password change remains unnoticed by the server until you restart it.
+
+```bash
+# /root/SOURCES is the location of all of my git cloned repositories
+cd /root/SOURCES/server/sql/
+mysql --user=root --host=localhost --password=pass < create_mysql.sql
+cd /root/SOURCES/server/src/bindings/scripts/sql
+# this should set up all the required scripts
+mysql --user=root --host=localhost --password=pass < scriptdev2_create_database.sql
+mysql --user=root --host=localhost --password=pass scriptdev2 < scriptdev2_create_structure_mysql.sql
+mysql --user=root --host=localhost --password=pass scriptdev2 < scriptdev2_script_full.sql
+cd /root/SOURCES/database/
+```
+At this point we can run the Linux Installer provided in the repository
+```bash
+bash ./install_linux.sh
+```
+Follow the on screen instructions. you will eventually come to a part of the script
+```bash
+Please enter the path to your Mangos Three repository:
+```
+At this point you will need to enter the path to the directory of your server code for example mine is:
+```bash
+/root/SOURCES/server
+```
+you should have a fully working database
+
+###CONFIGURATION SETTINGS
+Well if your still with me this far I think your doing pretty good. we will now set our configuration settings and even set up the AH-Bot. I haven't used to the client data extractors in quite some time ive been using a back up of my data for about a year and ive just been moving it around to difrent servers and new compiles how ever i dont think the processes has changed all that much.
+if you need get your data extracting i would go a head and do that now so you can work on your configuration settings. First off lets start with the realmd section as this is the easiest to get on-line with out any trouble.
+
+#####NOTES
 + /opt/mangos/logs - we will create this directory for our log files
 + /opt/mangos/data - we will create this directory for our data files
+
+Back to our shell (or putty through SSH):
+```bash
