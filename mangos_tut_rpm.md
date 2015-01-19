@@ -26,7 +26,9 @@ Because this is a Red Hat derivative firewalls are more prominently installed fr
 Also for this tutorial i will be using the MASTER branch when i git clone if you would like to specifically choose the branch to clone i would suggest reading a bit of documentation about choosing branches on github before we get started.
 
 ###PREINSTALL
-`yum groupinstall "Development Tools" "Additional Development"`
+```bash
+yum groupinstall "Development Tools" "Additional Development"
+```
 The above groupinstalls might be a bit overkill for installing libraries and dependencies how ever it ensures all necessary libraries are installed with the exception of ACE
 Ace was not available in the core repositories during the creation of the tutorial and should be downloaded and installed manually i will explain how in a minute.
 As of the time of this writing I had to run wget and grab the ACE release directly.
