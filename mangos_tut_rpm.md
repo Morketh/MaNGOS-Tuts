@@ -105,3 +105,22 @@ and now for the huge command of the day.
 ```bash
 cmake .. -DTBB_USE_EXTERNAL=1 -DCMAKE_BUILD_TYPE=release -DACE_USE_EXTERNAL=1 -DCMAKE_INSTALL_PREFIX=/opt/mangos -DINCLUDE_BINDINGS_DIR=scripts -DPCH=0 -DCMAKE_CXX_FLAGS="-O3 -march=native" -DCMAKE_C_FLAGS="-O3 -march=native"
 ```
+at this point if you get something like this:
+```bash
+CMake Error at CMakeLists.txt:137 (message):
+  This project requires ACE installed when ACE_USE_EXTERNAL is set.  Please
+  download the ACE Micro Release Kit from http://download.dre.vanderbilt.edu/
+  and install it.  If this script didn't find ACE and it was correctly
+  installed please set ACE_ROOT to the correct path.
+```
+then ACE hasnt been correctly installed If you ran the above install (yum localinstall ace) you need to ALSO set the ACE_ROOT so that cmake can acuratly determine where in your path its located
+now at first this one line looks pretty scary, but lets take a closer look and break it down to understand what were doing here
++ -DTBB_USE_EXTERNAL=1 this will instruct the compiler to locate and use the External TBB installation (should have been installed with the "Additional Development" group)
++ -DCMAKE_BUILD_TYPE=release for debugging purposes you may change this to debug
++ -DACE_USE_EXTERNAL=1 remember that ACE package we downloaded earlier? Yes this is where the compiler is told to use that
++ -DCMAKE_INSTALL_PREFIX=/opt/mangos this is our installation directory feel free to change this to any location you want however i prefer to have it here as this is the "optional software directory"
++ -DINCLUDE_BINDINGS_DIR=scripts this is the scripts directory that we cloned before you must have the cloned directory inside of the src/bindings directory
++ -DPCH=0 Pre-compiled headers option (tends to speed compile up however i dont think pre-compiled headers ship with mangos if any one would like to clarify on that id be happy to add the information)
+I found these next two off another wiki page for architecture optimization options essentially it stream-lines the code for your hardware
++ -DCMAKE_CXX_FLAGS="-O3 -march=native"
++ -DCMAKE_C_FLAGS="-O3 -march=native"
