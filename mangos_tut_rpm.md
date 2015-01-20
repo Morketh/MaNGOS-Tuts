@@ -1,17 +1,17 @@
 #Compiling and Installing on Red Hat Based Distros
 
-First off I made a Tutorial for Debian based distros specifically Ubuntu located [here](http://ubuntuforums.org/showthread.php?t=1964479). This guide is actually pretty old and with the new updates to the servers I thought it was tI'me to re build my Tutorial. Now I can hear you saying "But the thread title says Red Hat", and indeed you would be correct. For this particular guide I will be using a Red Hat Variation namely CentOS. Before we get started lets run through the basics:
+First off I made a Tutorial for Debian based distros specifically Ubuntu located [here](http://ubuntuforums.org/showthread.php?t=1964479). This guide is actually pretty old and with the new updates to the servers I thought it was time to re build my Tutorial. Now I can hear you saying "But the thread title says Red Hat", and indeed you would be correct. For this particular guide I will be using a Red Hat Variation namely CentOS. Before we get started lets run through the basics:
 
 This guide I will be assuming you have the OS pre-installed and ready for the picking.
-For this tutorial I will be using 2 Virtual Machines (one for Mangosd the other for RealmD) during the course of this tutorial I will mark which steps are for which machines (in the case you want to install on the *same* machine you may do so I am writing the guide in this fashion to show the separation of services)
 
 ###PREREQUISITES
 As a prerequisite you should understand the following:
 + Knowledge of BASH a Plus however not required
-+ Knowledge of command line text editors (i will use nano in this guide however you are more then welcome to use vi or even vim) Debian users that are used to "pico" should probably use nano as its praticly the same
++ Knowledge of command line text editors (i will use nano in this guide however you are more then welcome to use vi or even vim) Debian users that are used to "pico" should probably use nano as its practically the same
 + Users should also be fairly familiar with the Yellowdog Updater, Modified (yum package manager)
-+ Users should be knowledgeable with git and BASIC functionality we will need this for cloning repos
-+ usage of Putty and WinSCP is a bonus however if your doing this on the box its self you may not need these tools
++ Users should be knowledgeable with rudimentary git functionality we will need this for cloning repos
++ Usage of Putty is a bonus however if your doing this on the box its self you may not need these tools.
++ WinSCP or another similar piece of software for file transfer of data files to the server.
 
 ###PORTS
 Because this is a Red Hat derivative firewalls are more prominently installed from the get-go I will give a list of ports that you will need in order to use the system as this is an EAQ (Excessively Asked Question)
@@ -152,16 +152,18 @@ We are going to run a few commands to perform the following tasks:
 + import characters.sql
 + import scriptdev2 database (is this needed? Ive heard some things around the wiki about moving all that into the core when will that take effect?)
 
-now that we know what we are doing lets how we are doing it:
+now that we know what we are doing lets see how we are doing it:
 + MySQL root password:
 ```bash
-# In the even that you system didnt set a password at the time of install you will need to set the password here in order to use the installer provided
-# script will defualt to "root" as the password and will not accept a blank password
+# In the even that you system didnt set a password at the time of install
+# you will need to set the password here in order to use the installer provided
+# the script will defualt to "root" as the password and will not accept a blank password
+# in the event that you hadnot set a password for root you will leave the field blank in the following command
 mysql --user=root --password= --host=localhost
 # you should be looking at the MariaDB prompt 
 # MariaDB [(none)]>
 ```
-now at this prompt we will issue a few commands in order to set our root password and secure the server.
+Now at this prompt we will issue a few commands in order to set our root password and secure the server.
 ```sql
 UPDATE mysql.user SET Password = PASSWORD('new_password_here') WHERE User = 'root';
 FLUSH PRIVILEGES;
@@ -196,13 +198,13 @@ At this point you will need to enter the path to the directory of your server co
 That completes the database installation
 
 ###CONFIGURATION SETTINGS
-Well if your still with me this far I think your doing pretty good. We will now set our configuration settings and even set up the AH-Bot.First off lets start with the realmd section as this is the easiest to get on-line with out any trouble.
+Well if your still with me this far I think your doing pretty good. We will now set our configuration settings and even set up the AH-Bot. First off lets start with the realmd section as this is the easiest to get on-line with out any trouble.
 
 #####NOTES
 + /opt/mangos/logs - we will create this directory for our log files
 + /opt/mangos/data - we will create this directory for our data files
 
-I haven't used to the client data extractors in quite some time ive been using a back up of my data for about a year and ive just been moving it around to different servers and new compiles, however i dont think the processes has changed all that much. If you need get your data extracting I would go a head and do that now so you can work on your configuration settings.
+I haven't used the client data extractors in quite some time I've been using a back up of my data for about a year and I've just been moving it around to different servers and new compiles, however I don't think the processes has changed all that much. If you need to get your data extracting I would go a head and do that now so you can work on your configuration settings.
 
 Back to our shell (or putty through SSH):
 ```bash
@@ -217,7 +219,7 @@ now inside of the this directory you should see 3 files
 + scriptdev2.conf.dist
 
 Before we start to change configuration settings lets grab our AHBot.conf file 
-``bash
+```bash
 cp /root/SOURCES/server/src/game/AuctionHouseBot/ahbot.conf.dist.in /opt/mangos/etc/ahbot.conf.dist
 ```
 I copied ahbot.conf.dist.in to ahbot.conf.dist as i like to have the dist files around in case i need to look at the default settings. We will need to rename them (or simply copy) to reflect name.conf. A little bit of Bash-Fu and we can do all 4 renames in one line:
