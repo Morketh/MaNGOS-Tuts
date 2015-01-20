@@ -172,6 +172,7 @@ This will set the password of 'new_password_here' to the user root, it will effe
 ```bash
 # /root/SOURCES is the location of all of my git cloned repositories
 cd /root/SOURCES/server/sql/
+mysql --user=root --host=localhost--password=pass realmd < realmd.sql
 mysql --user=root --host=localhost --password=pass < create_mysql.sql
 cd /root/SOURCES/server/src/bindings/scripts/sql
 # this should set up all the required scripts
@@ -228,7 +229,8 @@ ls | sed -e "p;s/\.dist//" | xargs -n2 cp
 ```
 The ls output is piped to sed , then we use the p flag to print the argument without modifications, in other words , the original name of the file.
 The next step is use the substitute command to change file extension.
-NOTE: We’re using single quotes to enclose literal strings ( the dot is a metacharacter if using double quotes escape it with a backslash).
+
+*NOTE*: We’re using single quotes to enclose literal strings ( the dot is a metacharacter if using double quotes escape it with a backslash).
 The result is a combined output that consists of a sequence of old_file_name -> new_file_name.
 Finally we pipe the resulting feed through xargs to get the effective rename of the files.
 
@@ -267,6 +269,12 @@ RaLogFile = "remote_access.log"
 # The following color codes will be used "13 7 11 9"
 LogColors = "13 7 11 9"
 ...
+
+# Turn Remote Access On (I will be using it for connecting putty in order to run commands)
+Ra.Enable = 1
+...
+# If you require SOAP you can turn that on here 
+SOAP.Enabled = 1
 ```
 and scriptdev2.conf
 ```
@@ -281,4 +289,150 @@ and finally the AHBot.conf I will be leaving all values in the AH-Bot at default
 AuctionHouseBot.Seller.Enabled = 1
 ...
 AuctionHouseBot.Buyer.Enabled = 1
+```
+
+Well that takes care of all of the configuration and a few other options that you might want to use. Now at this point we have the data directory to populate and then its run-time.
+```bash
+# sudo if not root
+adduser --system --home-dir /opt/mangos --no-create-home --shell /usr/sbin/nologin --user-group mangos
+chown -R mangos:mangos /opt/mangos
+chmod -R 770 /opt/mangos
+```
+If you dont have a Black-Belt in Bash-Fu thats not a problem as we will now break that down into hopefully some thing a bit more understandable
++ --system we want to create a system user
++ --home-dir /opt/mangos this will be the home of the user we are going to create and should also reflect the base installation directory of your server core
++ --no-create-home this lets the adduser program not to create the home directory we already did that durring the install
++ --shell /usr/sbin/nologin we also donot want this new user to be able to log-in as this is a system user not a human user
++ --user-group this lets us create the group along side the user that way later on we can assign human users to that group and give out group permissions
++ mangos and finaly the name of the user/group we are creating 
+
+The chown sets mangos:mangos(user:group) as the full owner and group of that directory. And the chmod sets the permission to allow owner and group full access to the directory Recursively. We can add a user to our mangos group in order to upload files to the data directory:
+```bash
+# sudo if not root
+usermod USERNAME -a -G mangos
+```
+This will add USERNAME to the group mangos
+
+Once your data extraction utilities are done with there job you can move them over to the server using a tool like WinSCP. As long as you set your user in the mangos group you shouldnt run into any upload problems.
+
+###SERVER BOOT
+Lets boot the realmd server first and and see if its running fine
+```bash
+cd /opt/mangos/bin
+./realmd
+MaNGOS Three/ (* * Revision 12778 - *) for Linux_x64 (little-endian) [realm-daemon]
+<Ctrl-C> to stop.
+
+Using configuration file /opt/mangos/etc/realmd.conf.
+Login Database total connections: 2
+MySQL client library: 10.0.15-MariaDB
+MySQL server ver: 10.0.15-MariaDB
+MySQL client library: 10.0.15-MariaDB
+MySQL server ver: 10.0.15-MariaDB
+Added realm id 1, name 'MaNGOS'
+```
+At this point we know it loads with no issues so lets CTRL+C and set up the realm id 1 named MaNGOS. Back to our MySQL console we go:
+```bash
+mysql --user=root --password=pass --host=localhost
+```
+and then lets set the IP address of our host so we can connect our game client to the server:
+```sql
+UPDATE `realmd`.`realmlist` SET `address`='a.b.c.d' WHERE `id`=1;
+```
+now this line by its self will not workyou need to replace `a.b.c.d` with a real ip address if you are the same LAN you may specify the machines IP address found by running:
+```bash
+ifconfig
+```
+if you are connecting across the internet then the ip address you want to use is going to be you ISP assigned address you can find that by running:
+```bash
+curl -s 'http://checkip.dyndns.org' | sed 's/.*Current IP Address: \([0-9\.]*\).*/\1/g'
+```
+now lets boot mangosd and see the results of that
+```bash
+cd /opt/mangos/bin
+./mangosd
+```
+now at this point you should see a lot of loading and then if all goes well:
+```
+Starting Remote access listener on port 3443 on 0.0.0.0
+MaNGOSsoap: bound to http://127.0.0.1:7878
+Max allowed socket connections 16384
+Network Thread Starting
+Network Thread Starting
+```
+And then your up and running. if you would like to get into your RA Console you will need to set up a RAW socket connection to port 3443. I use putty for this just set your ip address for the server and then select raw hit connect and login using your administrative account (default is ADMINISTRATOR)
+
+###GM Commands
+there is a small script i wrote a while back to that logs into the mysql back end and grabs the gm commands and there permissions level from the database. For the sake of refrance and documentation i will post them here for you:
+```php
+<?php
+
+$database = "mangos";
+$host = "localhost";
+$username = "mangos";
+$password = "mangos";
+
+// Insert a non-breaking space in place of an empty string, useful for tables.
+function ins_nbsp($something)
+{
+        if ($something == "")
+        {
+                $something = "&nbsp;";
+        }
+        return($something);
+}
+?>
+
+<html>
+
+<head>
+   <title>Mangos Commands</title>
+</head>
+
+<body bgcolor="black">
+<font color="white">
+<center><h1>Commands</h1></center>
+
+<center>
+<table bordercolor="black" border="1">
+        <tr>
+                <th><FONT COLOR=WHITE>Name</FONT></th>
+                <th><FONT COLOR=WHITE>GM Level</FONT></th>
+                <th><FONT COLOR=WHITE>Description</FONT></th>
+        </tr>
+
+<?php
+$view = 60;
+$db = mysql_connect($host, $username, $password) or die ("Unable to connect!");
+mysql_select_db($database,$db) or die ("Unable to select database!");
+
+$query =  "SELECT name, security, help FROM mangos.command ORDER BY security";
+
+$result = mysql_query($query);
+while ($row = mysql_fetch_array($result))
+{
+        $name = $row["name"];
+        $security = $row["security"];
+        $help = $row["help"];
+        echo "\t<tr>\n";
+
+        echo "\t\t<td><FONT COLOR=WHITE>$name</FONT></td>\n";
+        echo "\t\t<td><FONT COLOR=WHITE>$security</FONT></td>\n";
+        echo "\t\t<td><FONT COLOR=WHITE>$help</FONT></td>\n";
+        echo "\t</tr>\n";
+}
+?>
+
+</table>
+</center>
+</font>
+<br>
+
+
+</body>
+</html>
+```
+pretty simple little page its just a black page with a white table of commands these commands are sorted by Account level you may change the sorting by any field by adujusting the SQL Query:
+```sql
+SELECT name, security, help FROM mangos.command ORDER BY security;
 ```
