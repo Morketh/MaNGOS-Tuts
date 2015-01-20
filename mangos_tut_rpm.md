@@ -436,3 +436,16 @@ pretty simple little page its just a black page with a white table of commands t
 ```sql
 SELECT name, security, help FROM mangos.command ORDER BY security;
 ```
+
+###FIREWALL
+The list of ports is located towards the top of this page with a full disciption the commands below will open each port on the firewall. For those ports 
+In the event that your RPM Distro has a firewall installed here is a list of commands that will help you open your ports:
+```bash
+iptables -A INPUT -p tcp --dport 3306 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+iptables -A INPUT -p tcp --dport 3443 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+iptables -A INPUT -p tcp --dport 22 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+iptables -A INPUT -p tcp --dport 8085 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+iptables -A INPUT -p tcp --dport 3724 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+iptables -A INPUT -p tcp --dport 80 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+iptables -A INPUT -p tcp --dport 7878 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+```
