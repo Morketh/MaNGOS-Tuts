@@ -150,15 +150,15 @@ We are going to run a few commands to perform the following tasks:
 + import realmd.sql
 + import mangos.sql
 + import characters.sql
-+ import scriptdev2 database (is this needed? Ive heard some things around the wiki about moving all that into the core when will that take effect?)
++ import scriptdev2 database (is this needed? I've heard some things around the wiki about moving all that into the core when will that take effect?)
 
 now that we know what we are doing lets see how we are doing it:
 + MySQL root password:
 ```bash
-# In the even that you system didnt set a password at the time of install
+# In the even that you system didn't set a password at the time of install
 # you will need to set the password here in order to use the installer provided
-# the script will defualt to "root" as the password and will not accept a blank password
-# in the event that you hadnot set a password for root you will leave the field blank in the following command
+# the script will default to "root" as the password and will not accept a blank password
+# in the event that you had not set a password for root you will leave the field blank in the following command
 mysql --user=root --password= --host=localhost
 # you should be looking at the MariaDB prompt 
 # MariaDB [(none)]>
@@ -341,7 +341,7 @@ and then lets set the IP address of our host so we can connect our game client t
 ```sql
 UPDATE `realmd`.`realmlist` SET `address`='a.b.c.d' WHERE `id`=1;
 ```
-now this line by its self will not work you need to replace `a.b.c.d` with a real ip address if you are the same LAN you may specify the machines IP address found by running:
+now this line by its self will not work you need to replace `a.b.c.d` with a real ip address if you are on the same LAN you may specify the machines IP address found by running:
 ```bash
 ifconfig
 ```
