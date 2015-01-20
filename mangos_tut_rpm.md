@@ -211,3 +211,80 @@ if you need get your data extracting i would go a head and do that now so you ca
 
 Back to our shell (or putty through SSH):
 ```bash
+cd /opt/mangos
+mkdir /opt/mangos/logs
+mkdir /opt/mangos/data
+cd /opt/mangos/etc
+```
+now inside of the this directory you should see 3 files
++ mangosd.conf.dist
++ realmd.conf.dist
++ scriptdev2.conf.dist
+
+Before we start to change configuration settings lets grab our AHBot.conf file 
+``bash
+cp /root/SOURCES/server/src/game/AuctionHouseBot/ahbot.conf.dist.in /opt/mangos/etc/ahbot.conf.dist
+```
+I copied ahbot.conf.dist.in to ahbot.conf.dist as i like to have the dist files around in case i need to look at the default settings. We will need to rename them (or simply copy) to reflect name.conf. A little bit of Bash-Fu and we can do all 4 renames in one line:
+```bash
+# rename the files
+ls | sed -e "p;s/\.dist//" | xargs -n2 mv
+# to copy and leave the .dist files as a back up as i like to do
+ls | sed -e "p;s/\.dist//" | xargs -n2 cp
+```
+The ls output is piped to sed , then we use the p flag to print the argument without modifications, in other words , the original name of the file.
+The next step is use the substitute command to change file extension.
+NOTE: We’re using single quotes to enclose literal strings ( the dot is a metacharacter if using double quotes escape it with a backslash).
+The result is a combined output that consists of a sequence of old_file_name -> new_file_name.
+Finally we pipe the resulting feed through xargs to get the effective rename of the files.
+
+Now that we have adjusted all the file names lets modify a few settings in the files to allow us to connect to the database and get our servers up.
+First off lets edit the RealmD settings:
+```
+# hostname;port;username;password;database
+LoginDatabaseInfo = "127.0.0.1;3306;mangos;mangos;realmd"
+...
+LogsDir = "../logs" # the path is relative to the bin directory
+...
+# Also because I like colourful readouts to identify problems we specify log colors here
+# Format "normal_color details_color debug_color error_color
+# The following color codes will be used "13 7 11 9"
+LogColors = "13 7 11 9"
+...
+```
+
+That is the RealmD configuration settings and now for our mangosd configuration:
+```
+DataDir = "../data"
+LogsDir = "../logs"
+LoginDatabaseInfo     = "127.0.0.1;3306;mangos;mangos;realmd"
+WorldDatabaseInfo     = "127.0.0.1;3306;mangos;mangos;mangos"
+CharacterDatabaseInfo = "127.0.0.1;3306;mangos;mangos;characters"
+...
+# the following are turned on my setup how ever they are not required to turn the server on
+WorldLogFile = "world.log"
+...
+GmLogFile = "gms.log"
+...
+RaLogFile = "remote_access.log"
+...
+# Also because I like colourful readouts to identify problems we specify log colors here
+# Format "normal_color details_color debug_color error_color
+# The following color codes will be used "13 7 11 9"
+LogColors = "13 7 11 9"
+...
+```
+and scriptdev2.conf
+```
+ScriptDev2DatabaseInfo     = "127.0.0.1;3306;mangos;mangos;scriptdev2"
+
+# Log File for SD2-Errors
+SD2ErrorLogFile = "../logs/SD2Errors.log" #there is no log directory option so you must specify path + file here
+```
+
+and finally the AHBot.conf I will be leaving all values in the AH-Bot at defaults, however i will show you which lines are needed to turn the AH-Bot on:
+```
+AuctionHouseBot.Seller.Enabled = 1
+...
+AuctionHouseBot.Buyer.Enabled = 1
+```
