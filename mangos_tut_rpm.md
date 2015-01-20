@@ -232,7 +232,7 @@ ls | sed -e "p;s/\.dist//" | xargs -n2 cp
 The ls output is piped to sed , then we use the p flag to print the argument without modifications, in other words , the original name of the file.
 The next step is use the substitute command to change file extension.
 
-*NOTE*: We’re using single quotes to enclose literal strings ( the dot is a metacharacter if using double quotes escape it with a backslash).
+**NOTE**: We’re using single quotes to enclose literal strings ( the dot is a metacharacter if using double quotes escape it with a backslash).
 The result is a combined output that consists of a sequence of old_file_name -> new_file_name.
 Finally we pipe the resulting feed through xargs to get the effective rename of the files.
 
@@ -301,12 +301,12 @@ chown -R mangos:mangos /opt/mangos
 chmod -R 770 /opt/mangos
 ```
 If you dont have a Black-Belt in Bash-Fu thats not a problem as we will now break that down into hopefully some thing a bit more understandable
-+ --system we want to create a system user
-+ --home-dir /opt/mangos this will be the home of the user we are going to create and should also reflect the base installation directory of your server core
-+ --no-create-home this lets the adduser program not to create the home directory we already did that durring the install
-+ --shell /usr/sbin/nologin we also donot want this new user to be able to log-in as this is a system user not a human user
-+ --user-group this lets us create the group along side the user that way later on we can assign human users to that group and give out group permissions
-+ mangos and finaly the name of the user/group we are creating 
++ --system = we want to create a system user
++ --home-dir /opt/mangos = this will be the home of the user we are going to create and should also reflect the base installation directory of your server core
++ --no-create-home = this lets the adduser program know not to create the home directory, we already did that during the install
++ --shell /usr/sbin/nologin = we also do not want this new user to be able to log-in as this is a system user not a human user
++ --user-group = this lets us create the group along side the user that way later on we can assign human users to that group and give out group permissions
++ mangos = finaly the name of the user/group we are creating 
 
 The chown sets mangos:mangos(user:group) as the full owner and group of that directory. And the chmod sets the permission to allow owner and group full access to the directory Recursively. We can add a user to our mangos group in order to upload files to the data directory:
 ```bash
@@ -341,11 +341,11 @@ and then lets set the IP address of our host so we can connect our game client t
 ```sql
 UPDATE `realmd`.`realmlist` SET `address`='a.b.c.d' WHERE `id`=1;
 ```
-now this line by its self will not workyou need to replace `a.b.c.d` with a real ip address if you are the same LAN you may specify the machines IP address found by running:
+now this line by its self will not work you need to replace `a.b.c.d` with a real ip address if you are the same LAN you may specify the machines IP address found by running:
 ```bash
 ifconfig
 ```
-if you are connecting across the internet then the ip address you want to use is going to be you ISP assigned address you can find that by running:
+if you are connecting across the internet then the ip address you want to use is going to be your ISP assigned address you can find that by running:
 ```bash
 curl -s 'http://checkip.dyndns.org' | sed 's/.*Current IP Address: \([0-9\.]*\).*/\1/g'
 ```
@@ -365,7 +365,7 @@ Network Thread Starting
 And then your up and running. if you would like to get into your RA Console you will need to set up a RAW socket connection to port 3443. I use putty for this just set your ip address for the server and then select raw hit connect and login using your administrative account (default is ADMINISTRATOR)
 
 ###GM Commands
-there is a small script i wrote a while back to that logs into the mysql back end and grabs the gm commands and there permissions level from the database. For the sake of refrance and documentation i will post them here for you:
+Here is a small script I wrote a while back to log into the mysql back end and grabs the gm commands and there permissions level from the database. For the sake of reference and documentation I will post it here for you:
 ```php
 <?php
 
@@ -405,8 +405,8 @@ function ins_nbsp($something)
 
 <?php
 $view = 60;
-$db = mysql_connect($host, $username, $password) or die ("Unable to connect!");
-mysql_select_db($database,$db) or die ("Unable to select database!");
+$db = mysql_connect($host, $username, $password) or die ("Unable to Connect ERROR" . mysql_error());
+mysql_select_db($database,$db) or die ("Cannot select Database ERROR: " . mysql_error());
 
 $query =  "SELECT name, security, help FROM mangos.command ORDER BY security";
 
