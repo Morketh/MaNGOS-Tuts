@@ -8,9 +8,8 @@ For this tutorial I will be using 2 Virtual Machines (one for Mangosd the other 
 ###PREREQUISITES
 As a prerequisite you should understand the following:
 + Knowledge of BASH a Plus however not required
-+ Knowledge of command line text editors (i will use nano in this guide however you are more then welcome to use vi or even vI'm) Debian users that are used to "pico" should probably use nano as its praticly the same
++ Knowledge of command line text editors (i will use nano in this guide however you are more then welcome to use vi or even vim) Debian users that are used to "pico" should probably use nano as its praticly the same
 + Users should also be fairly familiar with the Yellowdog Updater, Modified (yum package manager)
-+ Since some of the repositories in ClearOS are disabled or are specifically for ClearOS users should also be familiar with wget for other required packages
 + Users should be knowledgeable with git and BASIC functionality we will need this for cloning repos
 + usage of Putty and WinSCP is a bonus however if your doing this on the box its self you may not need these tools
 
@@ -144,13 +143,6 @@ This will install your server software in the `-DCMAKE_INSTALL_PREFIX` location 
 + /opt/mangos/etc - will be all our configuration files
 + /opt/mangos/bin - binary directory containing the realmd and the mangosd programs
 
-
-#####NOTES
-just a few things id like to bring to your attention:
-+ thus far we have compiled our mangos core and grabbed all of our libraries and dependencies and we have the software installed
-+ if you are running a RealmD server separate from a MangosD server you should follow the above outlined steps on your secondary server as well.
-+ the following steps will be labelled with Mangos Server and Realm Server were appropriate
-
 ##DATABSE INSTALLATION
 Lets get back to our sources directory and start with adding in the required databases. Up until just recently adding all the databases and there patches was very difficult and i had created a few scripts to manage that task however i will not be using them as Factionwars, Nemok, BrainDedd and Antz have done a great job on a bash script that does most of the heavy lifting for you.
 We are going to run a few commands to perform the following tasks:
@@ -163,13 +155,14 @@ We are going to run a few commands to perform the following tasks:
 now that we know what we are doing lets how we are doing it:
 + MySQL root password:
 ```bash
-# In the even that you system didnt set a password at the time of install you will need to set the password here in order to use the installer provided as this script will defualt to "root" as the password
+# In the even that you system didnt set a password at the time of install you will need to set the password here in order to use the installer provided
+# script will defualt to "root" as the password and will not accept a blank password
 mysql --user=root --password= --host=localhost
 # you should be looking at the MariaDB prompt 
 # MariaDB [(none)]>
 ```
 now at this prompt we will issue a few commands in order to set our root password and secure the server.
-```bash
+```sql
 UPDATE mysql.user SET Password = PASSWORD('new_password_here') WHERE User = 'root';
 FLUSH PRIVILEGES;
 exit;
@@ -191,7 +184,7 @@ At this point we can run the Linux Installer provided in the repository
 ```bash
 bash ./install_linux.sh
 ```
-Follow the on screen instructions. you will eventually come to a part of the script
+Follow the on screen instructions. You will eventually come to a part of the script
 ```bash
 Please enter the path to your Mangos Three repository:
 ```
@@ -199,15 +192,16 @@ At this point you will need to enter the path to the directory of your server co
 ```bash
 /root/SOURCES/server
 ```
-you should have a fully working database
+That completes the database installation
 
 ###CONFIGURATION SETTINGS
-Well if your still with me this far I think your doing pretty good. we will now set our configuration settings and even set up the AH-Bot. I haven't used to the client data extractors in quite some time ive been using a back up of my data for about a year and ive just been moving it around to difrent servers and new compiles how ever i dont think the processes has changed all that much.
-if you need get your data extracting i would go a head and do that now so you can work on your configuration settings. First off lets start with the realmd section as this is the easiest to get on-line with out any trouble.
+Well if your still with me this far I think your doing pretty good. We will now set our configuration settings and even set up the AH-Bot.First off lets start with the realmd section as this is the easiest to get on-line with out any trouble.
 
 #####NOTES
 + /opt/mangos/logs - we will create this directory for our log files
 + /opt/mangos/data - we will create this directory for our data files
+
+I haven't used to the client data extractors in quite some time ive been using a back up of my data for about a year and ive just been moving it around to different servers and new compiles, however i dont think the processes has changed all that much. If you need get your data extracting I would go a head and do that now so you can work on your configuration settings.
 
 Back to our shell (or putty through SSH):
 ```bash
