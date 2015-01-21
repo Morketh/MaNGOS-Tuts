@@ -66,14 +66,14 @@ After the files are in place, install MariaDB and ACE with:
 # sudo if not root
 yum install MariaDB-server MariaDB-client ace-6.3.1
 ```
-Depending on your internet speed this next step might be a good time to get a cup of coffee during the creation of this tutorial I had about 7 hundred packages to install as well as updates.
-you will be prompted to accept the GPG key after the packages have been downloaded. Once all of that is installed we can move on to the rest of the development tools and libraries with the command:
+You will be prompted to accept the GPG key after the packages have been downloaded.
+Depending on your internet speed this next step might be a good time to get a cup of coffee during the creation of this tutorial I had about 7 hundred packages to install as well as updates. Once all of that is installed we can move on to the rest of the development tools and libraries with the command:
 ```bash
 # sudo if not root
 yum groupinstall "Development Tools" "Additional Development"
 ```
-The above group installs might be a bit overkill for installing libraries and dependencies how ever it ensures all necessary libraries are installed with the exception of ACE.
-at this point you should have a clean working environment ready to go. Now we can start to pull down the MaNGOS sources and set up our build environment.
+The above group installs might be a bit overkill for installing libraries and dependencies how ever it ensures all necessary libraries are installed.
+At this point you should have a clean working environment ready to go. Now we can start to pull down the MaNGOS sources and set up our build environment.
 
 ###BUILDING MANGOS
 At this time lets create our base directory tree from my home directory I'm going to create a SOURCES directory in which I will run all my git clones it is in this base directory where I keep all of my code.
