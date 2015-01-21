@@ -279,7 +279,7 @@ Ra.Enable = 1
 # If you require SOAP you can turn that on here 
 SOAP.Enabled = 1
 ```
-and scriptdev2.conf
+and `scriptdev2.conf`
 ```
 ScriptDev2DatabaseInfo     = "127.0.0.1;3306;mangos;mangos;scriptdev2"
 
@@ -287,7 +287,7 @@ ScriptDev2DatabaseInfo     = "127.0.0.1;3306;mangos;mangos;scriptdev2"
 SD2ErrorLogFile = "../logs/SD2Errors.log" #there is no log directory option so you must specify path + file here
 ```
 
-Finally the AHBot.conf I will be leaving all values in the AH-Bot at defaults, however I will show you which lines are needed to turn the AH-Bot on:
+Finally the `AHBot.conf` I will be leaving all values in the AH-Bot at defaults, however I will show you which lines are needed to turn the AH-Bot on:
 ```
 AuctionHouseBot.Seller.Enabled = 1
 ...
@@ -363,7 +363,7 @@ Max allowed socket connections 16384
 Network Thread Starting
 Network Thread Starting
 ```
-And then your up and running. if you would like to get into your RA Console you will need to set up a RAW socket connection to port 3443. I use putty for this just set your ip address for the server and then select raw hit connect and login using your administrative account (default is ADMINISTRATOR)
+And then your up and running. If you would like to get into your RA Console you will need to set up a RAW socket connection to port 3443. I use putty for this just set your ip address for the server and then select raw hit connect and login using your administrative account (default is ADMINISTRATOR)
 
 ###GM Commands
 Here is a small script I wrote a while back to log into the mysql back end and grabs the gm commands and there permissions level from the database. For the sake of reference and documentation I will post it here for you:
