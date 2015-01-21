@@ -7,7 +7,7 @@ This guide I will be assuming you have the OS pre-installed and ready for the pi
 ###PREREQUISITES
 As a prerequisite you should understand the following:
 + Knowledge of BASH a Plus however not required
-+ Knowledge of command line text editors (i will use nano in this guide however you are more then welcome to use vi or even vim) Debian users that are used to "pico" should probably use nano as its practically the same
++ Knowledge of command line text editors (I will use nano in this guide however you are more then welcome to use vi or even vim) Debian users that are used to "pico" should probably use nano as its practically the same
 + Users should also be fairly familiar with the Yellowdog Updater, Modified (yum package manager)
 + Users should be knowledgeable with rudimentary git functionality we will need this for cloning repos
 + Usage of Putty is a bonus however if your doing this on the box its self you may not need these tools.
@@ -26,7 +26,7 @@ Because this is a Red Hat derivative firewalls are more prominently installed fr
 ###PRE-INSTALLATION NOTES
 Some things to keep in mind as we walk through the installation:
 + CentOS 7 X64
-+ Default user on CentOS 7 is root, you may create a new user with out root privleges however for all the installs you will need root privleges. As i will be using root i will mark the areas you need to run commands with sudo for clarification.
++ Default user on CentOS 7 is root, you may create a new user with out root privleges however for all the installs you will need root privleges. As I will be using root I will mark the areas you need to run commands with sudo for clarification.
 + I will be using the MASTER branch when I git clone if you would like to specifically choose the branch to clone I would suggest reading a bit of documentation about choosing branches on github before we get started.
 + I will be using MariaDB 10.0 as a replacement for MySQL
 
@@ -37,7 +37,7 @@ Set up a YUM Repo to use the MariaDB official repositories
 # sudo if not root
 nano /etc/yum.repos.d/MariaDB.repo
 ```
-now in our newly created repo file we will set the following options
+Now in our newly created repo file we will set the following options
 ```bash
 # MariaDB 10.0 CentOS repository list - created 2015-01-19 02:15 UTC
 # http://mariadb.org/mariadb/repositories/
@@ -47,7 +47,7 @@ baseurl = http://yum.mariadb.org/10.0/centos7-amd64
 gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
 gpgcheck=1
 ```
-once we add the MariaDB repo lets also add the Repository for the ACE installs
+Once we add the MariaDB repo lets also add the Repository for the ACE installs
 ```bash
 nano /etc/yum.repos.d/ace_micro.repo
 ```
@@ -61,21 +61,22 @@ gpgcheck=1
 gpgkey=http://download.opensuse.org/repositories/devel:/libraries:/ACE:/micro/CentOS_7/repodata/repomd.xml.key
 enabled=1
 ```
-After the file is in place, install MariaDB and ACE with:
+After the files are in place, install MariaDB and ACE with:
 ```bash
 # sudo if not root
 yum install MariaDB-server MariaDB-client ace-6.3.1
 ```
-Depending on your internet speed this might be a good time to get a cup of coffee during the creation of this tutorial I had about 7 hundred packages to install as well as updates.
+Depending on your internet speed this next step might be a good time to get a cup of coffee during the creation of this tutorial I had about 7 hundred packages to install as well as updates.
 you will be prompted to accept the GPG key after the packages have been downloaded. Once all of that is installed we can move on to the rest of the development tools and libraries with the command:
 ```bash
 # sudo if not root
 yum groupinstall "Development Tools" "Additional Development"
 ```
 The above group installs might be a bit overkill for installing libraries and dependencies how ever it ensures all necessary libraries are installed with the exception of ACE.
-at this point you should have a clean working environment ready to go. and now we can start to pull down the MaNGOS sources and set up our build environment.
+at this point you should have a clean working environment ready to go. Now we can start to pull down the MaNGOS sources and set up our build environment.
+
 ###BUILDING MANGOS
-At this time lets create our base directory tree from my home directory I'm going to create a SOURCES directory in which i will run all my git clones it is in this base directory where i keep all of my code.
+At this time lets create our base directory tree from my home directory I'm going to create a SOURCES directory in which I will run all my git clones it is in this base directory where I keep all of my code.
 I'm going to create all of these directories in order to keep all of my repositories organized in a somewhat orderly fashion.
 ```bash
 mkdir SOURCES
@@ -87,12 +88,12 @@ Now you should have both the database and the server code ready to go however we
 ```bash
 git clone https://github.com/mangosthree/scripts.git server/src/bindings/scripts
 ```
-now you will note i am placing the scripts into the `server/src/bindings/scripts` directory this is rather important as we will be setting this as on of our compile options later on. Its important to note here that this is a step that can be hard to understand for a first timer but we wont get into depth in this tutorial about it.
-once all of our downloads are done we can create a few more directories and kick off the compile.
+Now you will note I am placing the scripts into the `server/src/bindings/scripts` directory this is rather important as we will be setting this as on of our compile options later on. Its important to note here that this is a step that can be hard to understand for a first timer but we wont get into depth in this tutorial about it.
+Once all of our downloads are done we can create a few more directories and kick off the compile.
 ```bash
 mkdir _build && cd _build
 ```
-and now for the huge command of the day.
+and here is the huge command of the day:
 ```bash
 cmake .. -DTBB_USE_EXTERNAL=1 -DCMAKE_BUILD_TYPE=release -DACE_USE_EXTERNAL=0 -DCMAKE_INSTALL_PREFIX=/opt/mangos -DINCLUDE_BINDINGS_DIR=scripts -DPCH=0 -DCMAKE_CXX_FLAGS="-O3 -march=native" -DCMAKE_C_FLAGS="-O3 -march=native"
 ```
@@ -100,15 +101,15 @@ Now at first this one line looks pretty scary, but lets take a closer look and b
 + -DTBB_USE_EXTERNAL=1 this will instruct the compiler to locate and use the External TBB sources (should have been installed with the "Additional Development" group)
 + -DCMAKE_BUILD_TYPE=release for debugging purposes you may change this to debug
 + -DACE_USE_EXTERNAL=0 remember that ACE package we installed earlier? Yes this is where the compiler is told to use that If we wanted to install MaNGOS with an EXTERNAL ace package we would need to download the source tar-ball and compile ACE along side of mangos
-+ -DCMAKE_INSTALL_PREFIX=/opt/mangos this is our installation directory feel free to change this to any location you want however i prefer to have it here as this is the "optional software directory"
++ -DCMAKE_INSTALL_PREFIX=/opt/mangos this is our installation directory feel free to change this to any location you want however I prefer to have it here as this is the "optional software directory"
 + -DINCLUDE_BINDINGS_DIR=scripts this is the scripts directory that we cloned before you must have the cloned directory inside of the src/bindings directory
-+ -DPCH=0 Pre-compiled headers option (tends to speed compile up however i dont think pre-compiled headers ship with mangos if any one would like to clarify on that id be happy to add the information)
++ -DPCH=0 Pre-compiled headers option (tends to speed compile up however I dont think pre-compiled headers ship with mangos if any one would like to clarify on that id be happy to add the information)
 
 I found these next two off another wiki page for architecture optimization options essentially it stream-lines the code for your hardware
 + -DCMAKE_CXX_FLAGS="-O3 -march=native"
 + -DCMAKE_C_FLAGS="-O3 -march=native"
 
-Now you should have a fully configured source directory and some output should appear on your terminal. as an example this is what mine looked like:
+Now you should have a fully configured source directory and some output should appear on your terminal, as an example this is what mine looked like:
 ```bash
 -- Detected 64-bit platform.
 -- Using mysql-config: /usr/bin/mysql_config
@@ -125,7 +126,7 @@ Now you should have a fully configured source directory and some output should a
 -- Generating done
 -- Build files have been written to: /root/SOURCES/server/_build
 ```
-at this point we can safely run our make and then proceed to install our packages
+At this point we can safely run our make and then proceed to install our packages
 ```bash
 make -j`getconf _NPROCESSORS_ONLN`
 ```
@@ -133,7 +134,7 @@ The option `getconf _NPROCESSORS_ONLN` instructs the server to get the number of
 + Dell Poweredge R900 4 quad-cores (total of 16 cores at 1.6GHz) and the server compiled in just about 2 minutes. 
 + Dell Poweredge 2850 2 dual cores (total of 4 cores at 2.8GHz) compiled in roughly 30 minutes.
 
-so depending on your system speed (and number of cores) this step could very well take a while to complete. Once the compile is done and you dont have any errors you can proceed to install it with
+So depending on your system speed (and number of cores) this step could very well take a while to complete. Once the compile is done and you dont have any errors you can proceed to install it with
 ```bash
 # sudo if not root
 make install
@@ -144,7 +145,7 @@ This will install your server software in the `-DCMAKE_INSTALL_PREFIX` location 
 + /opt/mangos/bin - binary directory containing the realmd and the mangosd programs
 
 ##DATABSE INSTALLATION
-Lets get back to our sources directory and start with adding in the required databases. Up until just recently adding all the databases and there patches was very difficult and i had created a few scripts to manage that task however i will not be using them as Factionwars, Nemok, BrainDedd and Antz have done a great job on a bash script that does most of the heavy lifting for you.
+Lets get back to our sources directory and start with adding in the required databases. Up until just recently adding all the databases and there patches was very difficult and I had created a few scripts to manage that task however I will not be using them as Factionwars, Nemok, BrainDedd and Antz have done a great job on a bash script that does most of the heavy lifting for you.
 We are going to run a few commands to perform the following tasks:
 + Set up root password (in the event it wasn't done during the yum install step)
 + import realmd.sql
@@ -213,7 +214,7 @@ mkdir /opt/mangos/logs
 mkdir /opt/mangos/data
 cd /opt/mangos/etc
 ```
-now inside of the this directory you should see 3 files
+Inside of the this directory you should see 3 files:
 + mangosd.conf.dist
 + realmd.conf.dist
 + scriptdev2.conf.dist
@@ -222,11 +223,11 @@ Before we start to change configuration settings lets grab our AHBot.conf file
 ```bash
 cp /root/SOURCES/server/src/game/AuctionHouseBot/ahbot.conf.dist.in /opt/mangos/etc/ahbot.conf.dist
 ```
-I copied ahbot.conf.dist.in to ahbot.conf.dist as i like to have the dist files around in case i need to look at the default settings. We will need to rename them (or simply copy) to reflect name.conf. A little bit of Bash-Fu and we can do all 4 renames in one line:
+I copied ahbot.conf.dist.in to ahbot.conf.dist as I like to have the dist files around in case I need to look at the default settings. We will need to rename them (or simply copy) to reflect name.conf. A little bit of Bash-Fu and we can do all 4 renames in one line:
 ```bash
 # rename the files
 ls | sed -e "p;s/\.dist//" | xargs -n2 mv
-# to copy and leave the .dist files as a back up as i like to do
+# to copy and leave the .dist files as a back up as I like to do
 ls | sed -e "p;s/\.dist//" | xargs -n2 cp
 ```
 The ls output is piped to sed , then we use the p flag to print the argument without modifications, in other words , the original name of the file.
@@ -286,7 +287,7 @@ ScriptDev2DatabaseInfo     = "127.0.0.1;3306;mangos;mangos;scriptdev2"
 SD2ErrorLogFile = "../logs/SD2Errors.log" #there is no log directory option so you must specify path + file here
 ```
 
-and finally the AHBot.conf I will be leaving all values in the AH-Bot at defaults, however i will show you which lines are needed to turn the AH-Bot on:
+Finally the AHBot.conf I will be leaving all values in the AH-Bot at defaults, however I will show you which lines are needed to turn the AH-Bot on:
 ```
 AuctionHouseBot.Seller.Enabled = 1
 ...
