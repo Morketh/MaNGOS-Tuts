@@ -238,7 +238,7 @@ The result is a combined output that consists of a sequence of old_file_name -> 
 Finally we pipe the resulting feed through xargs to get the effective rename of the files.
 
 Now that we have adjusted all the file names lets modify a few settings in the files to allow us to connect to the database and get our servers up.
-First off lets edit the RealmD settings:
+First off lets edit the RealmD settings `realmd.conf`:
 ```
 # hostname;port;username;password;database
 LoginDatabaseInfo = "127.0.0.1;3306;mangos;mangos;realmd"
@@ -252,7 +252,7 @@ LogColors = "13 7 11 9"
 ...
 ```
 
-That is the RealmD configuration settings and now for our mangosd configuration:
+That is the RealmD configuration settings and now for our mangosd configuration `mangosd.conf`:
 ```
 DataDir = "../data"
 LogsDir = "../logs"
