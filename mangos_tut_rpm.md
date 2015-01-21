@@ -375,15 +375,6 @@ $host = "localhost";
 $username = "mangos";
 $password = "mangos";
 
-// Insert a non-breaking space in place of an empty string, useful for tables.
-function ins_nbsp($something)
-{
-        if ($something == "")
-        {
-                $something = "&nbsp;";
-        }
-        return($something);
-}
 ?>
 
 <html>
