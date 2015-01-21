@@ -26,7 +26,7 @@ Because this is a Red Hat derivative firewalls are more prominently installed fr
 ###PRE-INSTALLATION NOTES
 Some things to keep in mind as we walk through the installation:
 + CentOS 7 X64
-+ Default user on CentOS 7 is root, you may create a new user with out root privleges however for all the installs you will need root privleges. As I will be using root I will mark the areas you need to run commands with sudo for clarification.
++ Default user on CentOS 7 is root, you may create a new user with out root privileges however for all the installs you will need root privileges. As I will be using root I will mark the areas you need to run commands with sudo for clarification.
 + I will be using the MASTER branch when I git clone if you would like to specifically choose the branch to clone I would suggest reading a bit of documentation about choosing branches on github before we get started.
 + I will be using MariaDB 10.0 as a replacement for MySQL
 
@@ -103,7 +103,7 @@ Now at first this one line looks pretty scary, but lets take a closer look and b
 + -DACE_USE_EXTERNAL=0 remember that ACE package we installed earlier? Yes this is where the compiler is told to use that If we wanted to install MaNGOS with an EXTERNAL ace package we would need to download the source tar-ball and compile ACE along side of mangos
 + -DCMAKE_INSTALL_PREFIX=/opt/mangos this is our installation directory feel free to change this to any location you want however I prefer to have it here as this is the "optional software directory"
 + -DINCLUDE_BINDINGS_DIR=scripts this is the scripts directory that we cloned before you must have the cloned directory inside of the src/bindings directory
-+ -DPCH=0 Pre-compiled headers option (tends to speed compile up however I dont think pre-compiled headers ship with mangos if any one would like to clarify on that id be happy to add the information)
++ -DPCH=0 Pre-compiled headers option (tends to speed compile up however I don't think pre-compiled headers ship with mangos if any one would like to clarify on that id be happy to add the information)
 
 I found these next two off another wiki page for architecture optimization options essentially it stream-lines the code for your hardware
 + -DCMAKE_CXX_FLAGS="-O3 -march=native"
@@ -233,7 +233,7 @@ ls | sed -e "p;s/\.dist//" | xargs -n2 cp
 The ls output is piped to sed , then we use the p flag to print the argument without modifications, in other words , the original name of the file.
 The next step is use the substitute command to change file extension.
 
-**NOTE**: We’re using single quotes to enclose literal strings ( the dot is a metacharacter if using double quotes escape it with a backslash).
+**NOTE**: We’re using single quotes to enclose literal strings ( the dot is a meta-character if using double quotes escape it with a backslash).
 The result is a combined output that consists of a sequence of old_file_name -> new_file_name.
 Finally we pipe the resulting feed through xargs to get the effective rename of the files.
 
@@ -301,13 +301,13 @@ adduser --system --home-dir /opt/mangos --no-create-home --shell /usr/sbin/nolog
 chown -R mangos:mangos /opt/mangos
 chmod -R 770 /opt/mangos
 ```
-If you dont have a Black-Belt in Bash-Fu thats not a problem as we will now break that down into hopefully some thing a bit more understandable
+If you don't have a Black-Belt in Bash-Fu that's not a problem as we will now break that down into hopefully some thing a bit more understandable
 + --system = we want to create a system user
 + --home-dir /opt/mangos = this will be the home of the user we are going to create and should also reflect the base installation directory of your server core
 + --no-create-home = this lets the adduser program know not to create the home directory, we already did that during the install
 + --shell /usr/sbin/nologin = we also do not want this new user to be able to log-in as this is a system user not a human user
 + --user-group = this lets us create the group along side the user that way later on we can assign human users to that group and give out group permissions
-+ mangos = finaly the name of the user/group we are creating 
++ mangos = finally the name of the user/group we are creating 
 
 The chown sets mangos:mangos(user:group) as the full owner and group of that directory. And the chmod sets the permission to allow owner and group full access to the directory Recursively. We can add a user to our mangos group in order to upload files to the data directory:
 ```bash
@@ -435,13 +435,13 @@ while ($row = mysql_fetch_array($result))
 </body>
 </html>
 ```
-pretty simple little page its just a black page with a white table of commands these commands are sorted by Account level you may change the sorting by any field by adujusting the SQL Query:
+Pretty simple little page its just a black page with a white table of commands these commands are sorted by Account level you may change the sorting by any field by adjusting the SQL Query:
 ```sql
 SELECT name, security, help FROM mangos.command ORDER BY security;
 ```
 
 ###FIREWALL
-The list of ports is located towards the top of this page with a full disciption the commands below will open each port on the firewall. For those ports 
+The list of ports is located towards the top of this page with a full description the commands below will open each port on the firewall. For those ports 
 In the event that your RPM Distro has a firewall installed here is a list of commands that will help you open your ports:
 ```bash
 iptables -A INPUT -p tcp --dport 3306 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
