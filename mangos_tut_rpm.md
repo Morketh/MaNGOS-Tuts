@@ -64,7 +64,7 @@ enabled=1
 After the files are in place, install MariaDB and ACE with:
 ```bash
 # sudo if not root
-yum install MariaDB-server MariaDB-client ace-6.3.1
+yum install MariaDB-server MariaDB-client ace
 ```
 You will be prompted to accept the GPG key after the packages have been downloaded.
 Depending on your internet speed this next step might be a good time to get a cup of coffee during the creation of this tutorial I had about 7 hundred packages to install as well as updates. Once all of that is installed we can move on to the rest of the development tools and libraries with the command:
