@@ -1,4 +1,4 @@
-#INSTALL NOTES FOR CLEAROS
+#INSTALL NOTES FOR CLEAROS MaNGOS Core 3
 
 ```bash
 yum-config-manager --enable clearos-developer clearos-epel clearos-core 
@@ -13,7 +13,6 @@ git clone https://github.com/CollectiveIndustries/database.git
 git clone https://github.com/CollectiveIndustries/scripts.git server/src/bindings/scripts
 git clone https://github.com/CollectiveIndustries/mangos-enhanced.git /var/www/html
 git clone https://github.com/CollectiveIndustries/mangos-enhanced.git /var/www/html/mangos
-
 
 cmake .. -DTBB_USE_EXTERNAL=1 -DCMAKE_BUILD_TYPE=release -DACE_USE_EXTERNAL=0 -DCMAKE_INSTALL_PREFIX=/opt/mangos -DINCLUDE_BINDINGS_DIR=scripts -DPCH=0 -DCMAKE_CXX_FLAGS="-O3 -march=native" -DCMAKE_C_FLAGS="-O3 -march=native"
 ```
